@@ -1,0 +1,5 @@
+yazi (26.5.6-1) UNRELEASED; urgency=medium
+
+  * Initial release. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Wed, 22 Jul 2026 22:26:54 -0400

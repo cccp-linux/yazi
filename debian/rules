@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+RUST_VER = 1.95
+
+export CARGO := $(shell command -v cargo-$(RUST_VER) 2>/dev/null || command -v cargo)
+export RUSTC := $(shell command -v rustc-$(RUST_VER) 2>/dev/null || command -v rustc)
+
+%:
+	dh $@
+
+override_dh_autoreconf:
+override_dh_update_autotools_config:
+override_dh_auto_configure:
+
+override_dh_auto_build:
+	$(CARGO) build --frozen --release \
+		--config 'profile.release.debug=true' --config 'profile.release.strip=false' \
+		--config 'source.crates-io.replace-with="vendored-sources"' \
+    	--config 'source.vendored-sources.directory="$(CURDIR)/vendor"' \
+ 		--package yazi-fm --package yazi-cli
+
+override_dh_auto_test:
+
+override_dh_clean:
+	dh_clean --exclude=vendor

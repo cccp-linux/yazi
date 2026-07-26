@@ -1,0 +1,6 @@
+#!/usr/bin/dh-exec
+assets/logo.png => usr/share/pixmaps/yazi.png
+assets/yazi.desktop usr/share/applications
+
+target/release/ya usr/bin
+target/release/yazi usr/bin
