@@ -1,0 +1,47 @@
+From: Dimitry Ishenko <dimitry.ishenko@gmail.com>
+Date: Jul, 26 2026 19:56:45 -0400
+Subject: [PATCH] Use rust 1.91
+
+This allows compatibility with most Ubuntu and Debian distributions.
+
+--- yazi-26.5.6.orig/Cargo.toml
++++ yazi-26.5.6/Cargo.toml
+@@ -10,7 +10,7 @@ license      = "MIT"
+ authors      = [ "sxyazi <sxyazi@gmail.com>" ]
+ homepage     = "https://yazi-rs.github.io"
+ repository   = "https://github.com/sxyazi/yazi"
+-rust-version = "1.95.0"
++rust-version = "1.91.0"
+ 
+ [profile.dev]
+ debug = "line-tables-only"
+--- yazi-26.5.6.orig/yazi-config/src/theme/icon.rs
++++ yazi-26.5.6/yazi-config/src/theme/icon.rs
+@@ -44,17 +44,17 @@ pub struct Icon {
+ 
+ impl Icon {
+ 	pub fn matches(&self, file: &File, hovered: bool) -> Option<I> {
+-		if let Some(i) = self.globs.matches(file) {
+-			return Some(i);
+-		}
+-
+ 		let name = file.name().unwrap_or_default();
+-		match file.is_dir() {
+-			true if let Some(i) = self.dirs.matches(name) => Some(i),
+-			false if let Some(i) = self.files.matches(name) => Some(i),
+-			false if let Some(i) = self.exts.matches(file.url.ext().unwrap_or_default()) => Some(i),
+-			_ => self.conds.matches(file, hovered),
+-		}
++        self.globs.matches(file)
++			.or_else(|| {
++				if file.is_dir() {
++					self.dirs.matches(name)
++				} else {
++					self.files.matches(name)
++						.or_else(|| self.exts.matches(file.url.ext().unwrap_or_default()))
++				}
++			})
++			.or_else(|| self.conds.matches(file, hovered))
+ 	}
+ }
+ 

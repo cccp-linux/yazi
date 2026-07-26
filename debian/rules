@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 export DH_VERBOSE = 1
-RUST_VER = 1.95
+RUST_VER = 1.91
 
 export CARGO := $(shell command -v cargo-$(RUST_VER) 2>/dev/null || command -v cargo)
 export RUSTC := $(shell command -v rustc-$(RUST_VER) 2>/dev/null || command -v rustc)
